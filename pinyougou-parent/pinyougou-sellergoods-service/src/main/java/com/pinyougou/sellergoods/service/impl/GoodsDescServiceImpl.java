@@ -1,4 +1,5 @@
 package com.pinyougou.sellergoods.service.impl;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -75,17 +76,22 @@ public class GoodsDescServiceImpl implements GoodsDescService {
 		tbGoodsDesc.setGoodsId(tbGoods.getId());
 		goodsDescMapper.insert(tbGoodsDesc);
 
+		addItem(tbGoods,tbGoodsDesc,goods);
+
+	}
+
+	private void addItem(TbGoods tbGoods, TbGoodsDesc tbGoodsDesc, Goods goods) {
 		if ("1".equals(tbGoods.getIsEnableSpec())) {
 			List<TbItem> itemList = goods.getItemList();
 			for (TbItem tbItem : itemList) {
-					String title = tbGoods.getGoodsName();
-					Map<String,Object> map = JSON.parseObject(tbItem.getSpec(), Map.class);
-					Set<String> keySet = map.keySet();
-					for (String key : keySet) {
-						title += " "+map.get(key);
-					}
-					tbItem.setTitle(title);
-					setItemValue(tbGoods,tbGoodsDesc,tbItem);
+				String title = tbGoods.getGoodsName();
+				Map<String,Object> map = JSON.parseObject(tbItem.getSpec(), Map.class);
+				Set<String> keySet = map.keySet();
+				for (String key : keySet) {
+					title += " "+map.get(key);
+				}
+				tbItem.setTitle(title);
+				setItemValue(tbGoods,tbGoodsDesc,tbItem);
 
 			}
 		} else {
@@ -96,15 +102,20 @@ public class GoodsDescServiceImpl implements GoodsDescService {
 		}
 	}
 
-
 	private void setItemValue(TbGoods tbGoods, TbGoodsDesc tbGoodsDesc, TbItem tbItem) {
 		List<Map> maps = JSON.parseArray(tbGoodsDesc.getItemImages(), Map.class);
+		tbItem.setPrice(tbGoods.getPrice());//价格
+		tbItem.setNum(99999);//库存数量
+		tbItem.setStatus("1");//状态
+		tbItem.setIsDefault("1");//默认
+		tbItem.setSpec("{}");//规格
 		tbItem.setImage((String) maps.get(0).get("url"));
 		tbItem.setCategoryid(tbGoods.getCategory3Id());
 		tbItem.setCreateTime(new Date());
 		tbItem.setUpdateTime(new Date());
 		tbItem.setGoodsId(tbGoods.getId());
 		tbItem.setSellerId(tbGoods.getSellerId());
+
 		//设置分类名
 		TbItemCat tbItemCat = itemCatMapper.selectByPrimaryKey(tbGoods.getCategory3Id());
 		tbItem.setCategory(tbItemCat.getName());
@@ -121,8 +132,19 @@ public class GoodsDescServiceImpl implements GoodsDescService {
 	 * 修改
 	 */
 	@Override
-	public void update(TbGoodsDesc goodsDesc){
-		goodsDescMapper.updateByPrimaryKey(goodsDesc);
+	public void update(Goods goods){
+		TbGoods tbGoods = goods.getTbGoods();
+		tbGoods.setAuditStatus("0");
+		goodsMapper.updateByPrimaryKey(tbGoods);
+
+		TbGoodsDesc tbGoodsDesc = goods.getTbGoodsDesc();
+		goodsDescMapper.updateByPrimaryKey(tbGoodsDesc);
+
+		TbItemExample example = new TbItemExample();
+		TbItemExample.Criteria criteria = example.createCriteria();
+		criteria.andGoodsIdEqualTo(tbGoods.getId());
+		itemMapper.deleteByExample(example);
+		addItem(tbGoods,tbGoodsDesc,goods);
 	}	
 	
 	/**
@@ -135,8 +157,13 @@ public class GoodsDescServiceImpl implements GoodsDescService {
 		Goods goods = new Goods();
 		TbGoods tbGoods = goodsMapper.selectByPrimaryKey(id);
 		TbGoodsDesc tbGoodsDesc = goodsDescMapper.selectByPrimaryKey(id);
+		TbItemExample example = new TbItemExample();
+		TbItemExample.Criteria criteria = example.createCriteria();
+		criteria.andGoodsIdEqualTo(id);
+		List<TbItem> tbItems = itemMapper.selectByExample(example);
 		goods.setTbGoods(tbGoods);
 		goods.setTbGoodsDesc(tbGoodsDesc);
+		goods.setItemList(tbItems);
 		return goods;
 	}
 

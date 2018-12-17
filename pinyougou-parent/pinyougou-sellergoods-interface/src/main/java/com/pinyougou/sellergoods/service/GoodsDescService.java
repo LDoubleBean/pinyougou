@@ -34,7 +34,7 @@ public interface GoodsDescService {
 	/**
 	 * 修改
 	 */
-	public void update(TbGoodsDesc goodsDesc);
+	public void update(Goods goods);
 	
 
 	/**

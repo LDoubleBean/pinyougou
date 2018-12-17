@@ -77,7 +77,9 @@ public class GoodsServiceImpl implements GoodsService {
 	@Override
 	public void delete(Long[] ids) {
 		for(Long id:ids){
-			goodsMapper.deleteByPrimaryKey(id);
+			TbGoods tbGoods = goodsMapper.selectByPrimaryKey(id);
+			tbGoods.setIsDelete("1");
+			goodsMapper.updateByPrimaryKey(tbGoods);
 		}		
 	}
 	
@@ -88,7 +90,7 @@ public class GoodsServiceImpl implements GoodsService {
 		
 		TbGoodsExample example=new TbGoodsExample();
 		Criteria criteria = example.createCriteria();
-
+		criteria.andIsDeleteIsNull();
 		if(goods!=null){
 
 			if(goods.getSellerId()!=null && goods.getSellerId().length()>0){

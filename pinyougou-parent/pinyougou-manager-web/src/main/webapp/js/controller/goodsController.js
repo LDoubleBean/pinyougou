@@ -1,5 +1,5 @@
  //控制层 
-app.controller('goodsController' ,function($scope,$controller   ,goodsService){	
+app.controller('goodsController' ,function($scope,$controller,itemCatService,goodsService){
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
@@ -59,7 +59,9 @@ app.controller('goodsController' ,function($scope,$controller   ,goodsService){
 			function(response){
 				if(response.success){
 					$scope.reloadList();//刷新列表
-				}						
+				} else {
+				    alert(response.message);
+                }
 			}		
 		);				
 	}
@@ -75,5 +77,29 @@ app.controller('goodsController' ,function($scope,$controller   ,goodsService){
 			}			
 		);
 	}
+
+    $scope.statusList = ['未审核','已审核','审核未通过','关闭'];
+	//查询所有品牌
+    $scope.findCategory = function () {
+        $scope.categoryList = [];
+        itemCatService.findAll().success(function (response) {
+            for (var i = 0; i < response.length; i++) {
+                $scope.categoryList[response[i].id] = response[i].name;
+            }
+        })
+    }
+
+    //审核商品
+    $scope.setAuditStatus = function (audiStatus) {
+        goodsService.update($scope.selectIds,audiStatus).success(function (response) {
+            if (response.success) {
+                $scope.reloadList();
+            } else {
+                alert(response.message);
+            }
+
+        })
+    }
+
     
 });	

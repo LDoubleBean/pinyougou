@@ -1,9 +1,12 @@
 package com.pinyougou.shop.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.pinyougou.pojo.TbGoods;
 import com.pinyougou.pojo.TbGoodsDesc;
+import com.pinyougou.pojo.TbItem;
 import com.pinyougou.pojogroup.Goods;
 import com.pinyougou.sellergoods.service.GoodsDescService;
+import com.pinyougou.sellergoods.service.GoodsService;
 import entity.PageResult;
 import entity.Result;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,6 +28,9 @@ public class GoodsDescController {
 
 	@Reference
 	private GoodsDescService goodsDescService;
+
+	@Reference
+	private GoodsService goodsService;
 	
 	/**
 	 * 返回全部列表
@@ -65,14 +71,23 @@ public class GoodsDescController {
 	
 	/**
 	 * 修改
-	 * @param goodsDesc
+	 * @param goods
 	 * @return
 	 */
 	@RequestMapping("/update")
-	public Result update(@RequestBody TbGoodsDesc goodsDesc){
+	public Result update(@RequestBody Goods goods){
 		try {
-			goodsDescService.update(goodsDesc);
-			return new Result(true, "修改成功");
+			String name = SecurityContextHolder.getContext().getAuthentication().getName();
+			for (TbItem tbItem : goods.getItemList()) {
+				System.out.println(tbItem.getPrice());
+			}
+			TbGoods tbGoods = goodsService.findOne(goods.getTbGoods().getId());
+			if (goods.getTbGoods().getSellerId().equals(name) || tbGoods.getSellerId().equals(name)) {
+				goodsDescService.update(goods);
+				return new Result(true, "修改成功");
+			} else {
+				return new Result(false,"非法操作");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new Result(false, "修改失败");

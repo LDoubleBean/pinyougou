@@ -70,7 +70,7 @@ public class GoodsDescController {
 	 * @return
 	 */
 	@RequestMapping("/update")
-	public Result update(@RequestBody TbGoodsDesc goodsDesc){
+	public Result update(@RequestBody Goods goodsDesc){
 		try {
 			goodsDescService.update(goodsDesc);
 			return new Result(true, "修改成功");
