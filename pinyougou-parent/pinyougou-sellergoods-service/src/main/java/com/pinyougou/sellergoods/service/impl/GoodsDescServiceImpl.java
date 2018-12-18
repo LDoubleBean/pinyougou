@@ -17,6 +17,7 @@ import com.github.pagehelper.PageHelper;
 import com.pinyougou.pojo.TbGoodsDescExample.Criteria;
 
 import entity.PageResult;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 服务实现层
@@ -24,6 +25,7 @@ import entity.PageResult;
  *
  */
 @Service
+@Transactional
 public class GoodsDescServiceImpl implements GoodsDescService {
 
 	@Autowired
@@ -70,6 +72,7 @@ public class GoodsDescServiceImpl implements GoodsDescService {
 
 		TbGoods tbGoods = goods.getTbGoods();
 		tbGoods.setAuditStatus("0");
+		tbGoods.setIsMarketable("0");
 		goodsMapper.insert(tbGoods);
 
 		TbGoodsDesc tbGoodsDesc = goods.getTbGoodsDesc();

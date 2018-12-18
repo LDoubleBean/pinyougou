@@ -18,8 +18,8 @@ app.service('goodsService',function($http){
 		return  $http.post('../goods/add.do',entity );
 	}
 	//修改 
-	this.update=function(entity){
-		return  $http.post('../goods/update.do',entity );
+	this.update=function(ids,status){
+		return  $http.post('../goods/update.do?ids='+ids+'&status='+status);
 	}
 	//删除
 	this.dele=function(ids){

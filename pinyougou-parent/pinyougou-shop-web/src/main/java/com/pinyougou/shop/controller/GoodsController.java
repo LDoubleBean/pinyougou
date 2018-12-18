@@ -63,13 +63,18 @@ public class GoodsController {
 	
 	/**
 	 * 修改
-	 * @param goods
+	 * @param ids
+	 * @param status
 	 * @return
 	 */
 	@RequestMapping("/update")
-	public Result update(@RequestBody TbGoods goods){
+	public Result update(Long[] ids, String status){
 		try {
-			goodsService.update(goods);
+			for (Long id : ids) {
+				TbGoods goods= goodsService.findOne(id);
+				goods.setIsMarketable(status);
+				goodsService.update(goods);
+			}
 			return new Result(true, "修改成功");
 		} catch (Exception e) {
 			e.printStackTrace();

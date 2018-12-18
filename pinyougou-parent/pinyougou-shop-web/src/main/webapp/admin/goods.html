@@ -47,8 +47,8 @@
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-default" title="新建" ><i class="fa fa-file-o"></i> 新建</button>
                                         <button type="button" class="btn btn-default" title="删除" ><i class="fa fa-trash-o"></i> 删除</button>
-                                        <button type="button" class="btn btn-default" title="提交审核" ><i class="fa fa-check"></i> 提交审核</button>
-                                        <button type="button" class="btn btn-default" title="屏蔽" onclick='confirm("你确认要屏蔽吗？")'><i class="fa fa-ban"></i> 屏蔽</button>
+                                        <button type="button" class="btn btn-default" title="上架" ng-click="setMarketableStatus('1')" ><i class="fa fa-check"></i>上架</button>
+                                        <button type="button" class="btn btn-default" title="下架" ng-click="setMarketableStatus('0')"><i class="fa fa-ban"></i> 下架</button>
                                         <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i class="fa fa-refresh"></i> 刷新</button>
                                     </div>
                                 </div>
@@ -81,20 +81,26 @@
 									      <th class="sorting">一级分类</th>
 									      <th class="sorting">二级分类</th>
 									      <th class="sorting">三级分类</th>
-									      <th class="sorting">状态</th>									     						
+                                          <th class="sorting">商品状态</th>
+                                          <th class="sorting">审核状态</th>
 					                      <th class="text-center">操作</th>
 			                          </tr>
 			                      </thead>
 			                      <tbody>
 			                          <tr ng-repeat="good in list" >
-			                              <td><input  type="checkbox"></td>			                              
+			                              <td><input  type="checkbox" ng-click="updateSelection($event,good.id)"></td>
 				                          <td>{{good.id}}</td>
 									      <td>{{good.goodsName}}</td>
 									      <td>{{good.price}}</td>
 									      <td>{{categoryList[good.category1Id]}}</td>
 									      <td>{{categoryList[good.category2Id]}}</td>
 									      <td>{{categoryList[good.category3Id]}}</td>
-		                                  <td>
+                                          <td>
+		                                  	<span>
+		                                  		{{marketableStatusList[good.isMarketable]}}
+		                                  	</span>
+                                          </td>
+                                          <td>
 		                                  	<span>
 		                                  		{{statusList[good.auditStatus]}}
 		                                  	</span>

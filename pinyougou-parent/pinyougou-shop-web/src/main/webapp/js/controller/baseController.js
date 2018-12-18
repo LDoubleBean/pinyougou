@@ -3,7 +3,8 @@ app.controller('baseController' ,function($scope){
 	
     //重新加载列表 数据
     $scope.reloadList=function(){
-    	//切换页码  
+    	//切换页码
+        $scope.selectIds=[];
     	$scope.search( $scope.paginationConf.currentPage, $scope.paginationConf.itemsPerPage);	   	
     }
     

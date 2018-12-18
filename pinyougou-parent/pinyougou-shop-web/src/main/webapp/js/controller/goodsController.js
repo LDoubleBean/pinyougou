@@ -77,11 +77,22 @@ app.controller('goodsController' ,function($scope,$controller,itemCatService,goo
 	}
 
 	$scope.statusList = ['未审核','已审核','审核未通过','关闭'];
+    $scope.marketableStatusList = ['下架','上架'];
 	$scope.findCategory = function () {
         $scope.categoryList = [];
 		itemCatService.findAll().success(function (response) {
             for (var i = 0; i < response.length; i++) {
                 $scope.categoryList[response[i].id] = response[i].name;
+            }
+        })
+    }
+
+    $scope.setMarketableStatus = function (status) {
+        goodsService.update($scope.selectIds,status).success(function (response) {
+            if (response.success) {
+                $scope.reloadList();
+            } else {
+                alert(response.message);
             }
         })
     }
