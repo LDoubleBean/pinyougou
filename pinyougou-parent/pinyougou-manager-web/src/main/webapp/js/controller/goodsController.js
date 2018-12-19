@@ -1,5 +1,5 @@
  //控制层 
-app.controller('goodsController' ,function($scope,$controller,itemCatService,goodsService,brandService,goodsDescService){
+app.controller('goodsController' ,function($scope,$controller,itemCatService,goodsService){
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
@@ -101,19 +101,5 @@ app.controller('goodsController' ,function($scope,$controller,itemCatService,goo
         })
     }
 
-    $scope.findByIds = function (brandId,goodsId) {
-
-        goodsService.findOne(goodsId).success(function (response) {
-            $scope.commodity = response;
-        })
-
-        brandService.findOne(brandId).success(function (response) {
-            $scope.brand = response;
-        })
-
-        goodsDescService.findOne(goodsId).success(function (response) {
-            $scope.goodDesc = response.tbGoodsDesc;
-            $scope.goodDesc.itemImages = JSON.parse( $scope.goodDesc.itemImages);
-        })
-    }
+    
 });	

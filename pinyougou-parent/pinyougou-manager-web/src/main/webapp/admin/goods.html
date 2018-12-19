@@ -23,8 +23,6 @@
     <script src="../js/base_pagination.js"></script>
     <script src="../js/service/goodsService.js"></script>
     <script src="../js/service/itemCatService.js"></script>
-    <script src="../js/service/brandService.js"></script>
-    <script src="../js/service/goodsDescService.js"></script>
     <script src="../js/controller/baseController.js"></script>
     <script src="../js/controller/goodsController.js"></script>
 
@@ -49,7 +47,7 @@
                                         <button type="button" class="btn btn-default" title="删除" ng-click="dele()" ><i class="fa fa-trash-o"></i> 删除</button>
                                         <button type="button" class="btn btn-default" title="审核通过" ng-click="setAuditStatus('1')" ><i class="fa fa-check"></i> 审核通过</button>
                                         <button type="button" class="btn btn-default" title="驳回" ng-click="setAuditStatus('2')" ><i class="fa fa-ban"></i> 驳回</button>
-                                        <a class="btn btn-default" title="刷新" onclick="window.location.reload();" ><i class="fa fa-refresh"></i> 刷新</a>
+                                        <a class="btn btn-default" title="刷新" href="goods.html" ><i class="fa fa-refresh"></i> 刷新</a>
                                     </div>
                                 </div>
                             </div>
@@ -93,7 +91,7 @@
                                               </span>
                                           </td>
                                           <td class="text-center">
-		                                 	  <button type="button" ng-click="findByIds(good.brandId,good.id)" class="btn bg-olive btn-xs"  data-toggle="modal"  data-target="#sellerModal">详情</button>
+		                                 	  <button type="button" class="btn bg-olive btn-xs" >详情</button>
 		                                  </td>
 			                          </tr>
 			                      </tbody>
@@ -108,79 +106,6 @@
 
                      </div>
                     <!-- /.box-body -->
-
-  <div class="modal fade" id="sellerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg" >
-          <div class="modal-content">
-              <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                  <h3 id="myModalLabel">商家详情</h3>
-              </div>
-              <div class="modal-body">
-
-                  <ul class="nav nav-tabs">
-                      <li class="active"><a href="#home" data-toggle="tab">基本信息</a></li>
-                      <li><a href="#linkman" data-toggle="tab">商品图片</a></li>
-                  </ul>
-
-                  <!-- 选项卡开始 -->
-                  <div id="myTabContent" class="tab-content">
-                      <div class="tab-pane active in" id="home">
-                          <br>
-                          <table class="table table-bordered table-striped"  width="800px">
-                              <tr>
-                                  <td>商品分类</td>
-                                  <td>{{categoryList[commodity.category1Id]}} >> {{categoryList[commodity.category2Id]}} >> {{categoryList[commodity.category3Id]}} </td>
-                              </tr>
-                              <tr>
-                                  <td>商品名称</td>
-                                  <td> {{commodity.goodsName}} </td>
-                              </tr>
-                              <tr>
-                                  <td>品牌</td>
-                                  <td> {{brand.name}} </td>
-                              </tr>
-                              <tr>
-                                  <td>价格</td>
-                                  <td> {{commodity.price}} </td>
-                              </tr>
-                              <tr>
-                                  <td>商品介绍</td>
-                                  <td> {{goodDesc.introduction}} </td>
-                              </tr>
-                              <tr>
-                                  <td>包装列表</td>
-                                  <td> {{goodDesc.packageList}} </td>
-                              </tr>
-                          </table>
-                      </div>
-                      <div class="tab-pane fade" id="linkman">
-                          <br>
-                          <table class="table table-bordered table-striped" >
-                              <tr>
-                                  <td>颜色</td>
-                                  <td>图片</td>
-                              </tr>
-                              <tr ng-repeat="img in goodDesc.itemImages">
-                                  <td>{{img.color}}</td>
-                                  <td><img src="{{img.url}}" style="width: 100px; high:50px"></td>
-                              </tr>
-                          </table>
-                      </div>
-
-                  </div>
-                  <!-- 选项卡结束 -->
-
-
-              </div>
-              <div class="modal-footer">
-                  <button class="btn btn-success" data-dismiss="modal" aria-hidden="true" ng-click="selectIds=[commodity.id];setAuditStatus('1')">审核通过</button>
-                  <button class="btn btn-danger"  data-dismiss="modal" aria-hidden="true" ng-click="selectIds=[commodity.id];setAuditStatus('2')">驳回</button>
-                  <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
-              </div>
-          </div>
-      </div>
-  </div>
 
 </body>
 
