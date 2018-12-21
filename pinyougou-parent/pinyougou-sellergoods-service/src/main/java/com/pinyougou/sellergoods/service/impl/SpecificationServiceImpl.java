@@ -141,10 +141,9 @@ public class SpecificationServiceImpl implements SpecificationService {
 		Criteria criteria = example.createCriteria();
 		
 		if(specification!=null){			
-						if(specification.getSpecName()!=null && specification.getSpecName().length()>0){
+			if(specification.getSpecName()!=null && specification.getSpecName().length()>0){
 				criteria.andSpecNameLike("%"+specification.getSpecName()+"%");
 			}
-	
 		}
 		
 		Page<TbSpecification> page= (Page<TbSpecification>)specificationMapper.selectByExample(example);		
