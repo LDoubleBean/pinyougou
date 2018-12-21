@@ -22,5 +22,8 @@
         <module name="pinyougou-solr-util" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="pinyougou-solr-demo" target="1.5" />
+    </bytecodeTargetLevel>
   </component>
 </project>
