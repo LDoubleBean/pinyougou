@@ -20,7 +20,7 @@
 
 
 
-	<body ng-app="pinyougou" ng-controller="searchController">
+	<body ng-app="pinyougou" ng-controller="searchController" ng-init="initSearchPage()">
 		<!-- 头部栏位 -->
 		<!--页面顶部-->
 		<div id="nav-bottom">
@@ -240,16 +240,16 @@
 								<a href="#">销量</a>
 							</li>
 							<li>
-								<a href="#">新品</a>
+								<a href="#" ng-click="sortByCondition('DESC','updatetime')">新品</a>
 							</li>
 							<li>
 								<a href="#">评价</a>
 							</li>
 							<li>
-								<a href="#">价格↑</a>
+								<a href="#" ng-click="sortByCondition('ASC','price')">价格↑</a>
 							</li>
                             <li>
-                                <a href="#">价格↓</a>
+                                <a href="#" ng-click="sortByCondition('DESC','price')">价格↓</a>
                             </li>
 						</ul>
 					</div>

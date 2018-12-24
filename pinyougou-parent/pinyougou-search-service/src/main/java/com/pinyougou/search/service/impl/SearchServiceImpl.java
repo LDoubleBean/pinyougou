@@ -12,10 +12,7 @@ import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.core.query.*;
 import org.springframework.data.solr.core.query.result.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Administrator
@@ -113,6 +110,22 @@ public class SearchServiceImpl implements SearchService {
 			}
 		}
 
+		//获取排序规则
+		String sortRule = (String) map.get("sortRule");
+		//获取排序字段
+		String sortName = (String) map.get("sortName");
+		if (!"".equals(sortName) && !"".equals(sortRule)) {
+			//判断排序规则
+			if ("ASC".equals(sortRule)) {
+				//创建排序对象(排序规则，排序字段)
+				Sort sort = new Sort(Sort.Direction.ASC,"item_"+sortName);
+				query.addSort(sort);
+			} else if ("DESC".equals(sortRule)) {
+				Sort sort = new Sort(Sort.Direction.DESC,"item_"+sortName);
+				query.addSort(sort);
+			}
+		}
+
 		//分页显示
 		Integer pageNum = (Integer) map.get("pageNum");
 		Integer pageSize = (Integer) map.get("pageSize");
@@ -205,6 +218,25 @@ public class SearchServiceImpl implements SearchService {
 		}
 
 		return resultMap;
+	}
+
+	/**
+	 * 导入数据到solr
+	 * @param list
+	 */
+	@Override
+	public void ImportItem(List list) {
+		solrTemplate.saveBeans(list);
+		solrTemplate.commit();
+	}
+
+	@Override
+	public void deleteItemByIds(Long[] ids) {
+		Criteria criteria = new Criteria("item_goodsid").in(Arrays.asList(ids));
+		Query query = new SimpleQuery();
+		query.addCriteria(criteria);
+		solrTemplate.delete(query);
+		solrTemplate.commit();
 	}
 
 }

@@ -31,4 +31,7 @@
 	<dubbo:annotation package="com.pinyougou.search.controller" />
 
 
+
+
+
 </beans>

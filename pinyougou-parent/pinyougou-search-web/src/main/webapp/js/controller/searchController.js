@@ -1,6 +1,6 @@
-app.controller('searchController',function ($scope, searchService) {
+app.controller('searchController',function ($scope,$location, searchService) {
     
-    $scope.searchTerm = {"keywords":"","brand":"","category":"","price":"","pageNum":1,"pageSize":40,"spec":{}};
+    $scope.searchTerm = {"keywords":"","brand":"","category":"","price":"","pageNum":1,"pageSize":40,"spec":{},"sortRule":"","sortName":""};
     
     //搜索商品
     $scope.searchItem = function () {
@@ -98,11 +98,25 @@ app.controller('searchController',function ($scope, searchService) {
     //直接搜索单个品牌时，隐藏品牌列表
     $scope.hideBrand = function () {
         for (var i = 0; i < $scope.searchResult.brandList.length; i++) {
-            if ($scope.searchTerm.keywords ==  $scope.searchResult.brandList[i].text) {
+            if ($scope.searchTerm.keywords.indexOf($scope.searchResult.brandList[i].text) > 0  ) {
                 return true;
             }
         }
         return false;
+    }
+
+    //根据条件排序
+    $scope.sortByCondition = function (rule,name) {
+        $scope.searchTerm.sortRule = rule;
+        $scope.searchTerm.sortName = name;
+        $scope.searchItem();
+    }
+
+    //获取传递过来的数据，并查询
+    $scope.initSearchPage = function () {
+        var keywords = $location.search()['keywords'];
+        $scope.searchTerm.keywords = keywords;
+        $scope.searchItem();
     }
 
 })

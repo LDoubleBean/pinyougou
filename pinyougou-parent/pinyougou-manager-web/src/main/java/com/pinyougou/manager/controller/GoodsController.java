@@ -1,7 +1,13 @@
 package com.pinyougou.manager.controller;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.pinyougou.pojo.TbItem;
+import com.pinyougou.search.service.SearchService;
+import com.pinyougou.sellergoods.service.GoodsDescService;
 import com.pinyougou.sellergoods.service.GoodsService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +28,12 @@ public class GoodsController {
 
 	@Reference
 	private GoodsService goodsService;
+
+	@Reference
+	private GoodsDescService goodsDescService;
+
+	@Reference
+	private SearchService searchService;
 	
 	/**
 	 * 返回全部列表
@@ -66,11 +78,17 @@ public class GoodsController {
 	 */
 	@RequestMapping("/update")
 	public Result update(Long[] ids, String status){
+		List<TbGoods> list = new ArrayList<>();
 		try {
 			for (Long id : ids) {
 				TbGoods tbGoods = goodsService.findOne(id);
 				tbGoods.setAuditStatus(status);
 				goodsService.update(tbGoods);
+			}
+			//如果状态上架的数据，则添加到solr库中
+			if ("1".equals(status)) {
+				List<TbItem> tbItems = goodsDescService.findTbItemByGoodsIdAndStatus(ids, status);
+				searchService.ImportItem(tbItems);
 			}
 			return new Result(true, "修改成功");
 		} catch (Exception e) {
@@ -98,6 +116,7 @@ public class GoodsController {
 	public Result delete(Long [] ids){
 		try {
 			goodsService.delete(ids);
+			searchService.deleteItemByIds(ids);
 			return new Result(true, "删除成功"); 
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -1,9 +1,5 @@
 package com.pinyougou.sellergoods.service.impl;
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import com.alibaba.fastjson.JSON;
 import com.pinyougou.mapper.*;
@@ -210,5 +206,13 @@ public class GoodsDescServiceImpl implements GoodsDescService {
 		Page<TbGoodsDesc> page= (Page<TbGoodsDesc>)goodsDescMapper.selectByExample(example);		
 		return new PageResult(page.getTotal(), page.getResult());
 	}
-	
+
+	public List<TbItem> findTbItemByGoodsIdAndStatus(Long[] ids,String status) {
+		TbItemExample example = new TbItemExample();
+		com.pinyougou.pojo.TbItemExample.Criteria criteria = example.createCriteria();
+		criteria.andStatusEqualTo(status);
+		criteria.andGoodsIdIn(Arrays.asList(ids));
+		return itemMapper.selectByExample(example);
+	}
+
 }

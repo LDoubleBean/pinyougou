@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.data.solr.core.SolrTemplate;
+import org.springframework.data.solr.core.query.Query;
+import org.springframework.data.solr.core.query.SimpleQuery;
+import org.springframework.data.solr.core.query.SolrDataQuery;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -27,33 +30,26 @@ public class SolrUtil {
 	@Autowired
 	private SolrTemplate solrTemplate;
 
-	public void solrAdd() {
-		TbItem item = new TbItem();
-		item.setId(1L);
-		item.setTitle("华为P20");
-		item.setGoodsId(1L);
-		item.setPrice(new BigDecimal(2999.00));
-		item.setCategory("手机");
-		item.setBrand("华为");
-		item.setSeller("华为旗舰店");
-		solrTemplate.saveBean(item);
-	}
-
 	public void saveDate() {
-		TbItemExample example = new TbItemExample();
-		TbItemExample.Criteria criteria = example.createCriteria();
-		criteria.andStatusEqualTo("1");
-		List<TbItem> tbItems = tbItemMapper.selectByExample(example);
-		System.out.println("----商品列表----");
-		for (TbItem tbItem : tbItems) {
-			System.out.println(tbItem.getTitle()+" "+tbItem.getBrand()+" "+tbItem.getPrice());
-			String spec = tbItem.getSpec();
-			Map<String,String> map = JSON.parseObject(spec, Map.class);
-			tbItem.setSpecMap(map);
-		}
-		solrTemplate.saveBeans(tbItems);
+
+		Query query  = new SimpleQuery("*:*");
+		solrTemplate.delete(query);
 		solrTemplate.commit();
-		System.out.println("----结束----");
+
+//		TbItemExample example = new TbItemExample();
+//		TbItemExample.Criteria criteria = example.createCriteria();
+//		criteria.andStatusEqualTo("1");
+//		List<TbItem> tbItems = tbItemMapper.selectByExample(example);
+//		System.out.println("----商品列表----");
+//		for (TbItem tbItem : tbItems) {
+//			System.out.println(tbItem.getTitle()+" "+tbItem.getBrand()+" "+tbItem.getPrice());
+//			String spec = tbItem.getSpec();
+//			Map<String,String> map = JSON.parseObject(spec, Map.class);
+//			tbItem.setSpecMap(map);
+//		}
+//		solrTemplate.saveBeans(tbItems);
+//		solrTemplate.commit();
+//		System.out.println("----结束----");
 
 	}
 
