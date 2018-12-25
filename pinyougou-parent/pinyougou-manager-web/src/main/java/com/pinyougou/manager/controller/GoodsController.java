@@ -2,12 +2,11 @@ package com.pinyougou.manager.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pinyougou.page.service.PageService;
 import com.pinyougou.pojo.TbItem;
 import com.pinyougou.search.service.SearchService;
 import com.pinyougou.sellergoods.service.GoodsDescService;
 import com.pinyougou.sellergoods.service.GoodsService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,6 +33,9 @@ public class GoodsController {
 
 	@Reference
 	private SearchService searchService;
+
+	@Reference
+	private PageService pageService;
 	
 	/**
 	 * 返回全部列表
@@ -135,5 +137,13 @@ public class GoodsController {
 	public PageResult search(@RequestBody TbGoods goods, int page, int rows  ){
 		return goodsService.findPage(goods, page, rows);		
 	}
-	
+
+	/**
+	 * 创建静态页面
+	 * @param goodsId
+	 */
+	@RequestMapping("/createHtmlPage")
+	public void createHtmlPage(Long goodsId) {
+		pageService.createHtmlPage(goodsId);
+	}
 }

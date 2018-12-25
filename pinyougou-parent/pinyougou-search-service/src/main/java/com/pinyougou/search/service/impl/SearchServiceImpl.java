@@ -1,6 +1,5 @@
 package com.pinyougou.search.service.impl;
 
-import com.alibaba.druid.sql.visitor.functions.Lpad;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.pinyougou.pojo.TbItem;
 import com.pinyougou.search.service.SearchService;
