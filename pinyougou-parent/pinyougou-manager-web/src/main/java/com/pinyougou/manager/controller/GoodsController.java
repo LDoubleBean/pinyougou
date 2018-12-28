@@ -2,11 +2,13 @@ package com.pinyougou.manager.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pinyougou.page.service.PageService;
+import com.alibaba.fastjson.JSON;
 import com.pinyougou.pojo.TbItem;
-import com.pinyougou.search.service.SearchService;
 import com.pinyougou.sellergoods.service.GoodsDescService;
 import com.pinyougou.sellergoods.service.GoodsService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +18,12 @@ import com.pinyougou.pojo.TbGoods;
 
 import entity.PageResult;
 import entity.Result;
+
+import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.Session;
+
 /**
  * controller
  * @author Administrator
@@ -31,11 +39,22 @@ public class GoodsController {
 	@Reference
 	private GoodsDescService goodsDescService;
 
-	@Reference
-	private SearchService searchService;
+	@Autowired
+	private JmsTemplate jmsTemplate;
 
-	@Reference
-	private PageService pageService;
+	@Autowired
+	private Destination solrAddQueue;
+
+	@Autowired
+	private Destination solrDeleteQueue;
+
+	@Autowired
+	private Destination pageTopic;
+
+	@Autowired
+	private Destination deletePageTopic;
+
+
 	
 	/**
 	 * 返回全部列表
@@ -90,10 +109,25 @@ public class GoodsController {
 			}
 			//如果状态上架的数据，则添加到solr库中
 			if ("1".equals(status)) {
-				List<TbItem> tbItems = goodsDescService.findTbItemByGoodsIdAndStatus(ids, status);
-				searchService.ImportItem(tbItems);
-				for (Long id : ids) {
-					pageService.createHtmlPage(id);
+				final List<TbItem> tbItems = goodsDescService.findTbItemByGoodsIdAndStatus(ids, status);
+				//添加索引库
+				jmsTemplate.send(solrAddQueue, new MessageCreator() {
+					@Override
+					public Message createMessage(Session session) throws JMSException {
+						String message = JSON.toJSONString(tbItems);
+						return session.createTextMessage(message);
+					}
+				});
+				//searchService.ImportItem(tbItems);
+				for (final Long id : ids) {
+					//创建静态页面
+					jmsTemplate.send(pageTopic, new MessageCreator() {
+						@Override
+						public Message createMessage(Session session) throws JMSException {
+							return session.createTextMessage(id+"");
+						}
+					});
+					//pageService.createHtmlPage(id);
 				}
 			}
 
@@ -122,10 +156,24 @@ public class GoodsController {
 	 * @return
 	 */
 	@RequestMapping("/delete")
-	public Result delete(Long [] ids){
+	public Result delete(final Long [] ids){
 		try {
 			goodsService.delete(ids);
-			searchService.deleteItemByIds(ids);
+			//删除索引库
+			jmsTemplate.send(solrDeleteQueue, new MessageCreator() {
+				@Override
+				public Message createMessage(Session session) throws JMSException {
+					return session.createObjectMessage(ids);
+				}
+			});
+			//searchService.deleteItemByIds(ids);
+			//删除生成的静态页面
+			jmsTemplate.send(deletePageTopic, new MessageCreator() {
+				@Override
+				public Message createMessage(Session session) throws JMSException {
+					return session.createObjectMessage(ids);
+				}
+			});
 			return new Result(true, "删除成功"); 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -146,11 +194,11 @@ public class GoodsController {
 	}
 
 	/**
-	 * 创建静态页面
+	 * 创建静态页面 测试
 	 * @param goodsId
 	 */
-	@RequestMapping("/createHtmlPage")
-	public void createHtmlPage(Long goodsId) {
-		pageService.createHtmlPage(goodsId);
-	}
+//	@RequestMapping("/createHtmlPage")
+//	public void createHtmlPage(Long goodsId) {
+//		pageService.createHtmlPage(goodsId);
+//	}
 }
