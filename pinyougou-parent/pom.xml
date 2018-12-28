@@ -26,6 +26,8 @@
         <module>pinyougou-freemarker-demo</module>
         <module>pinyougou-page-interface</module>
         <module>pinyougou-page-service</module>
+        <module>pinyougou-activemq-demo</module>
+        <module>pinyougou-page-web</module>
     </modules>
 
     <!--指定本地仓库位置-->

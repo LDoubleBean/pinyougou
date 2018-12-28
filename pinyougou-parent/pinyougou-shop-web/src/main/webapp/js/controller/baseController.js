@@ -18,8 +18,7 @@ app.controller('baseController' ,function($scope){
      	 }
 	}; 
 	
-	$scope.selectIds=[];//选中的ID集合 
-
+	$scope.selectIds=[];//选中的ID集合
 	//更新复选
 	$scope.updateSelection = function($event, id) {		
 		if($event.target.checked){//如果是被选中,则增加到数组
@@ -41,4 +40,7 @@ app.controller('baseController' ,function($scope){
         return null;
     }
 
-});	
+});
+
+
+

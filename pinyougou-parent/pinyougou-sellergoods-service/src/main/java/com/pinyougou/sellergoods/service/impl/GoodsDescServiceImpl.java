@@ -91,27 +91,25 @@ public class GoodsDescServiceImpl implements GoodsDescService {
 
 			}
 		} else {
-			System.out.println(".....");
 			TbItem tbItem = new TbItem();
 			tbItem.setTitle(tbGoods.getGoodsName());
+			tbItem.setNum(99999);//库存数量
+			tbItem.setStatus("1");//状态
+			tbItem.setIsDefault("1");//默认
+			tbItem.setSpec("{}");//规格
+			tbItem.setPrice(tbGoods.getPrice());//价格
 			setItemValue(tbGoods,tbGoodsDesc,tbItem);
 		}
 	}
 
 	private void setItemValue(TbGoods tbGoods, TbGoodsDesc tbGoodsDesc, TbItem tbItem) {
 		List<Map> maps = JSON.parseArray(tbGoodsDesc.getItemImages(), Map.class);
-		tbItem.setPrice(tbGoods.getPrice());//价格
-		tbItem.setNum(99999);//库存数量
-		tbItem.setStatus("1");//状态
-		tbItem.setIsDefault("1");//默认
-		tbItem.setSpec("{}");//规格
 		tbItem.setImage((String) maps.get(0).get("url"));
 		tbItem.setCategoryid(tbGoods.getCategory3Id());
 		tbItem.setCreateTime(new Date());
 		tbItem.setUpdateTime(new Date());
 		tbItem.setGoodsId(tbGoods.getId());
 		tbItem.setSellerId(tbGoods.getSellerId());
-
 		//设置分类名
 		TbItemCat tbItemCat = itemCatMapper.selectByPrimaryKey(tbGoods.getCategory3Id());
 		tbItem.setCategory(tbItemCat.getName());
@@ -132,10 +130,8 @@ public class GoodsDescServiceImpl implements GoodsDescService {
 		TbGoods tbGoods = goods.getTbGoods();
 		tbGoods.setAuditStatus("0");
 		goodsMapper.updateByPrimaryKey(tbGoods);
-
 		TbGoodsDesc tbGoodsDesc = goods.getTbGoodsDesc();
 		goodsDescMapper.updateByPrimaryKey(tbGoodsDesc);
-
 		TbItemExample example = new TbItemExample();
 		TbItemExample.Criteria criteria = example.createCriteria();
 		criteria.andGoodsIdEqualTo(tbGoods.getId());

@@ -86,12 +86,19 @@ public class GoodsController {
 				TbGoods tbGoods = goodsService.findOne(id);
 				tbGoods.setAuditStatus(status);
 				goodsService.update(tbGoods);
+
 			}
 			//如果状态上架的数据，则添加到solr库中
 			if ("1".equals(status)) {
 				List<TbItem> tbItems = goodsDescService.findTbItemByGoodsIdAndStatus(ids, status);
 				searchService.ImportItem(tbItems);
+				for (Long id : ids) {
+					pageService.createHtmlPage(id);
+				}
 			}
+
+
+
 			return new Result(true, "修改成功");
 		} catch (Exception e) {
 			e.printStackTrace();
