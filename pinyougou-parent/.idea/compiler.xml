@@ -6,7 +6,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="alicom-mns-receive-samples" />
+        <module name="aliyun-java-sdk-core" />
+        <module name="aliyun-java-sdk-dysmsapi" />
         <module name="pinyougou-activemq-demo" />
+        <module name="pinyougou-cas-demo" />
+        <module name="pinyougou-cas-demo02" />
         <module name="pinyougou-common" />
         <module name="pinyougou-content-interface" />
         <module name="pinyougou-content-service" />
@@ -24,7 +29,11 @@
         <module name="pinyougou-sellergoods-interface" />
         <module name="pinyougou-sellergoods-service" />
         <module name="pinyougou-shop-web" />
+        <module name="pinyougou-sms" />
         <module name="pinyougou-solr-util" />
+        <module name="pinyougou-user-interface" />
+        <module name="pinyougou-user-service" />
+        <module name="pinyougou-user-web" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

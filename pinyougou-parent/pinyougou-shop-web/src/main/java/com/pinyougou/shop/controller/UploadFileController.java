@@ -23,7 +23,7 @@ public class UploadFileController {
 			String originalFilename = file.getOriginalFilename();
 			int index = originalFilename.lastIndexOf(".");
 			String extName = originalFilename.substring(index + 1);
-			FastDFSClient client = new FastDFSClient("classpath:config/fdfs_client.conf");
+			FastDFSClient client = new FastDFSClient("classpath:properties/fdfs_client.conf");
 			String url = file_server_url + client.uploadFile(file.getBytes(), extName);
 			return new Result(true,url);
 		} catch (Exception e) {

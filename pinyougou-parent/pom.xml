@@ -28,6 +28,9 @@
         <module>pinyougou-page-service</module>
         <module>pinyougou-activemq-demo</module>
         <module>pinyougou-page-web</module>
+        <module>pinyougou-user-interface</module>
+        <module>pinyougou-user-service</module>
+        <module>pinyougou-user-web</module>
     </modules>
 
     <!--指定本地仓库位置-->
