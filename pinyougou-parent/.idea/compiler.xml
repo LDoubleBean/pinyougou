@@ -10,6 +10,9 @@
         <module name="aliyun-java-sdk-core" />
         <module name="aliyun-java-sdk-dysmsapi" />
         <module name="pinyougou-activemq-demo" />
+        <module name="pinyougou-cart-interface" />
+        <module name="pinyougou-cart-service" />
+        <module name="pinyougou-cart-web" />
         <module name="pinyougou-cas-demo" />
         <module name="pinyougou-cas-demo02" />
         <module name="pinyougou-common" />
