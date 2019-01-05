@@ -6,9 +6,6 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="alicom-mns-receive-samples" />
-        <module name="aliyun-java-sdk-core" />
-        <module name="aliyun-java-sdk-dysmsapi" />
         <module name="pinyougou-activemq-demo" />
         <module name="pinyougou-cart-interface" />
         <module name="pinyougou-cart-service" />
@@ -26,6 +23,8 @@
         <module name="pinyougou-page-interface" />
         <module name="pinyougou-page-service" />
         <module name="pinyougou-page-web" />
+        <module name="pinyougou-pay-interface" />
+        <module name="pinyougou-pay-service" />
         <module name="pinyougou-pojo" />
         <module name="pinyougou-portal-web" />
         <module name="pinyougou-search-interface" />
@@ -42,7 +41,12 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="alicom-dysms-api" target="1.9" />
+      <module name="alicom-mns-receive-samples" target="1.6" />
+      <module name="aliyun-java-sdk-core" target="1.6" />
+      <module name="aliyun-java-sdk-dysmsapi" target="1.6" />
       <module name="pinyougou-solr-demo" target="1.5" />
+      <module name="wxpay-sdk" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
